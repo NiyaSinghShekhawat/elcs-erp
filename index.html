@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Student-first College ERP System" />
+    <title>ELCS - Student ERP</title>
+    <style>
+      /* Fallback styles in case CSS doesn't load */
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      }
+      #root {
+        min-height: 100vh;
+      }
+      /* Loading indicator */
+      #root:empty::before {
+        content: 'Loading...';
+        display: block;
+        padding: 50px;
+        text-align: center;
+        color: #0ea5e9;
+        font-size: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <div style="padding:50px;text-align:center;">
+        <h1>JavaScript Required</h1>
+        <p>You need to enable JavaScript to run this app.</p>
+      </div>
+    </noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
