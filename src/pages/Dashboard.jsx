@@ -87,12 +87,22 @@ const Dashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         className="mb-8"
       >
-        <h1 className="text-4xl font-bold gradient-text mb-2">
-          Welcome back, {studentInfo.name.split(' ')[0]}! 👋
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          {getDayName(currentTime)}, {format(currentTime, 'MMMM d, yyyy')} • {format(currentTime, 'h:mm a')}
-        </p>
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h1 className="text-4xl font-bold gradient-text mb-2">
+              Welcome back, {studentInfo.name}! 👋
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              {getDayName(currentTime)}, {format(currentTime, 'MMMM d, yyyy')} • {format(currentTime, 'h:mm a')}
+            </p>
+          </div>
+          <div className="px-4 py-2 bg-gradient-to-r from-primary-100 to-purple-100 dark:from-primary-900/30 dark:to-purple-900/30 rounded-lg border border-primary-200 dark:border-primary-800">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Class & Year</p>
+            <p className="text-lg font-bold text-primary-700 dark:text-primary-300">
+              {studentInfo.classInfo}
+            </p>
+          </div>
+        </div>
       </motion.div>
 
       {/* Stats Cards */}

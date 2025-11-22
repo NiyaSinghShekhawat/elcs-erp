@@ -10,6 +10,12 @@ import Communities from './pages/Communities'
 import StudyMaterials from './pages/StudyMaterials'
 import Canteen from './pages/Canteen'
 import Settings from './pages/Settings'
+import Attendance from './pages/Attendance'
+import ExaminationSchedule from './pages/ExaminationSchedule'
+import PlacementCell from './pages/PlacementCell'
+import ExamResults from './pages/ExamResults'
+import LeaveApplication from './pages/LeaveApplication'
+import ContactMentor from './pages/ContactMentor'
 
 function App() {
   return (
@@ -27,6 +33,12 @@ function App() {
               <Route path="/materials" element={<StudyMaterials />} />
               <Route path="/canteen" element={<Canteen />} />
               <Route path="/settings" element={<Settings />} />
+              <Route path="/attendance" element={<Attendance />} />
+              <Route path="/examination-schedule" element={<ExaminationSchedule />} />
+              <Route path="/placement-cell" element={<PlacementCell />} />
+              <Route path="/exam-results" element={<ExamResults />} />
+              <Route path="/leave-application" element={<LeaveApplication />} />
+              <Route path="/contact-mentor" element={<ContactMentor />} />
             </Routes>
           </main>
         </div>

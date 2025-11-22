@@ -4,9 +4,12 @@ import { Users, MessageSquare, Hash, Building2, GraduationCap, Heart } from 'luc
 import { groups, clubs } from '../data/demoData'
 import { studentInfo } from '../data/demoData'
 
+// Initialize joined groups from data
+const initialJoinedGroups = groups.filter(g => g.joined).map(g => g.id)
+
 const Communities = () => {
   const [selectedType, setSelectedType] = useState('all')
-  const [joinedGroups, setJoinedGroups] = useState([1, 2, 4, 5])
+  const [joinedGroups, setJoinedGroups] = useState(initialJoinedGroups)
 
   const filteredGroups = groups.filter(g => {
     if (selectedType === 'all') return true
@@ -23,9 +26,7 @@ const Communities = () => {
 
   const getTypeIcon = (type) => {
     switch (type) {
-      case 'college-wide': return Building2
-      case 'branch': return Hash
-      case 'year': return GraduationCap
+      case 'community': return Building2
       case 'club': return Heart
       default: return Users
     }
@@ -33,9 +34,7 @@ const Communities = () => {
 
   const getTypeColor = (type) => {
     const colors = {
-      'college-wide': 'from-blue-500 to-cyan-500',
-      'branch': 'from-purple-500 to-pink-500',
-      'year': 'from-green-500 to-emerald-500',
+      'community': 'from-blue-500 to-cyan-500',
       'club': 'from-orange-500 to-red-500',
     }
     return colors[type] || 'from-gray-500 to-gray-600'
@@ -61,19 +60,23 @@ const Communities = () => {
         className="mb-6"
       >
         <div className="flex flex-wrap gap-2">
-          {['all', 'college-wide', 'branch', 'year', 'club'].map((type) => (
+          {[
+            { value: 'all', label: 'All' },
+            { value: 'community', label: 'Community' },
+            { value: 'club', label: 'Clubs' }
+          ].map(({ value, label }) => (
             <motion.button
-              key={type}
+              key={value}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setSelectedType(type)}
-              className={`px-6 py-2 rounded-xl font-semibold capitalize transition-all ${
-                selectedType === type
+              onClick={() => setSelectedType(value)}
+              className={`px-6 py-2 rounded-xl font-semibold transition-all ${
+                selectedType === value
                   ? 'bg-primary-500 text-white shadow-lg'
                   : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
-              {type.replace('-', ' ')}
+              {label}
             </motion.button>
           ))}
         </div>
@@ -108,7 +111,7 @@ const Communities = () => {
                         {group.name}
                       </h3>
                       <p className="text-xs text-gray-500 dark:text-gray-400 capitalize mt-1">
-                        {group.type.replace('-', ' ')}
+                        {group.type === 'community' ? 'Community' : 'Club'}
                       </p>
                     </div>
                   </div>
@@ -131,14 +134,6 @@ const Communities = () => {
                       <Hash size={16} className="text-primary-600 dark:text-primary-400" />
                       <span className="text-gray-700 dark:text-gray-300">
                         {group.branch}
-                      </span>
-                    </div>
-                  )}
-                  {group.year && (
-                    <div className="flex items-center space-x-2 text-sm">
-                      <GraduationCap size={16} className="text-primary-600 dark:text-primary-400" />
-                      <span className="text-gray-700 dark:text-gray-300">
-                        Year {group.year}
                       </span>
                     </div>
                   )}
@@ -187,8 +182,8 @@ const Communities = () => {
             <div className="flex flex-wrap gap-2">
               {groups
                 .filter(g => 
-                  (g.type === 'branch' && g.branch === studentInfo.branch) ||
-                  (g.type === 'year' && g.year === studentInfo.year && g.branch === studentInfo.branch)
+                  (g.type === 'community' && g.branch === studentInfo.branch) ||
+                  (g.type === 'community' && g.name === 'College Announcements')
                 )
                 .map(group => (
                   <span

@@ -116,6 +116,25 @@ const Schedule = () => {
                       </div>
                     )}
 
+                    {cls.isLab && cls.labProtocols && (
+                      <div className="mt-4 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <BookOpen size={16} className="text-purple-600 dark:text-purple-400" />
+                          <span className="text-sm font-semibold text-purple-700 dark:text-purple-300">
+                            Lab Protocols
+                          </span>
+                        </div>
+                        <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                          {cls.labProtocols.map((protocol, idx) => (
+                            <li key={idx} className="flex items-start space-x-2">
+                              <span className="text-purple-600 dark:text-purple-400">•</span>
+                              <span>{protocol}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
                     {cls.topics && cls.topics.length > 0 && (
                       <div className="mt-4">
                         <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">

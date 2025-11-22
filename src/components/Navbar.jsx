@@ -3,7 +3,9 @@ import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   LayoutDashboard, Calendar, FileText, CalendarDays, 
-  Users, BookOpen, UtensilsCrossed, Settings, Menu, X 
+  Users, BookOpen, UtensilsCrossed, Settings, Menu, X,
+  GraduationCap, User, ChevronDown, ClipboardCheck, 
+  GraduationCap as ExamIcon, Briefcase, Award, FileEdit, MessageSquare
 } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { studentInfo } from '../data/demoData'
@@ -24,6 +26,16 @@ const Navbar = () => {
   const { theme, toggleTheme } = useTheme()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
+
+  const academicMenuItems = [
+    { path: '/attendance', icon: ClipboardCheck, label: 'Attendance' },
+    { path: '/examination-schedule', icon: ExamIcon, label: 'Examination Schedule' },
+    { path: '/placement-cell', icon: Briefcase, label: 'Placement Cell' },
+    { path: '/exam-results', icon: Award, label: 'Exam Results' },
+    { path: '/leave-application', icon: FileEdit, label: 'Leave Application' },
+    { path: '/contact-mentor', icon: MessageSquare, label: 'Contact Mentor' },
+  ]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,6 +44,17 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isProfileDropdownOpen && !event.target.closest('.relative')) {
+        setIsProfileDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isProfileDropdownOpen])
 
   return (
     <motion.nav
@@ -45,19 +68,6 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 group">
-            <motion.div
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.6 }}
-              className="w-10 h-10 bg-gradient-to-br from-primary-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg"
-            >
-              E
-            </motion.div>
-            <span className="text-xl font-bold gradient-text hidden sm:block">
-              ELCS
-            </span>
-          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
@@ -106,14 +116,64 @@ const Navbar = () => {
               {theme === 'light' ? '🌙' : '☀️'}
             </motion.button>
 
-            {/* User Avatar */}
-            <div className="hidden sm:flex items-center space-x-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-purple-500 flex items-center justify-center text-white text-sm font-semibold">
-                {studentInfo.avatar}
-              </div>
-              <span className="text-sm font-medium hidden lg:block dark:text-gray-300">
-                {studentInfo.name.split(' ')[0]}
-              </span>
+            {/* User Avatar with Dropdown */}
+            <div className="hidden sm:block relative">
+              <button
+                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                className="flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg px-2 py-1 transition-colors"
+              >
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-purple-500 flex items-center justify-center text-white text-sm font-semibold">
+                  {studentInfo.avatar}
+                </div>
+                <span className="text-sm font-medium hidden lg:block dark:text-gray-300">
+                  {studentInfo.name}
+                </span>
+                <ChevronDown 
+                  size={16} 
+                  className={`text-gray-600 dark:text-gray-400 transition-transform ${
+                    isProfileDropdownOpen ? 'rotate-180' : ''
+                  }`} 
+                />
+              </button>
+
+              {/* Profile Dropdown */}
+              <AnimatePresence>
+                {isProfileDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50"
+                  >
+                    <div className="p-3 border-b border-gray-200 dark:border-gray-700">
+                      <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                        Academic
+                      </p>
+                    </div>
+                    <div className="py-2">
+                      {academicMenuItems.map((item) => {
+                        const Icon = item.icon
+                        const isActive = location.pathname === item.path
+                        return (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            onClick={() => setIsProfileDropdownOpen(false)}
+                            className={`flex items-center space-x-3 px-4 py-2.5 transition-colors ${
+                              isActive
+                                ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400'
+                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            }`}
+                          >
+                            <Icon size={18} />
+                            <span className="text-sm font-medium">{item.label}</span>
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* Mobile Menu Button */}
